@@ -50,7 +50,7 @@ In chat context you can simple write:
 
 ### Serial Port Configuration
 
-The server uses the `/dev/ttyUSB0` serial port by default. You may need to modify the [`src/counter.rs`](src/counter.rs:45) file to use the correct serial port for your system.
+The server uses the `/dev/ttyUSB0` serial port by default. You may need to modify the [turret_mcp_server.rs](src/turret_mcp_server.rs) file to use the correct serial port for your system.
 
 ### Dependencies
 
