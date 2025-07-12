@@ -1,13 +1,9 @@
-mod counter;
+mod turret_mcp_server;
 
-use std::sync::Arc;
+use crate::turret_mcp_server::Turret;
 use anyhow::Result;
-
-use rmcp::{ServiceExt, transport::stdio, tool_router, tool, model::*, Error as McpError};
-use rmcp::handler::server::tool::ToolRouter;
-use tokio::sync::Mutex;
+use rmcp::{ServiceExt, transport::stdio};
 use tracing_subscriber::{self, EnvFilter};
-use crate::counter::Counter;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -21,10 +17,11 @@ async fn main() -> Result<()> {
     tracing::info!("Starting MCP server");
 
     // Create an instance of our counter router
-    let service = Counter::new().serve(stdio()).await.inspect_err(|e| {
+    let service = Turret::new().serve(stdio()).await.inspect_err(|e| {
         tracing::error!("serving error: {:?}", e);
     })?;
 
     service.waiting().await?;
+
     Ok(())
 }
