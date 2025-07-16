@@ -3,7 +3,9 @@ mod turret_mcp_server;
 use crate::turret_mcp_server::Turret;
 use anyhow::Result;
 use rmcp::{ServiceExt, transport::stdio};
+
 use tracing_subscriber::{self, EnvFilter};
+
 
 #[tokio::main]
 async fn main() -> Result<()> {

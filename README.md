@@ -4,6 +4,9 @@
 
 This project is an MCP (Model Context Protocol) server that controls a turret using serial communication. It exposes tools to:
 
+![turret.png](./turret.png)
+
+
 *   Fire the turret
 *   Set the turret's position (pan and tilt)
 *   Get the current number of bullets
@@ -25,14 +28,12 @@ This server exposes tools that can be accessed via an MCP client.
 2.  Clone the repository.
 3.  Navigate to the project directory.
 4.  Run `cargo build -r` to build the project.
-5.  Run `cargo run -r` to start the server.
-6.  MCP Agent Plugin node require config_json like this to command or URL to connect MCP servers
+5.  MCP Agent Plugin node require config_json like this to command or URL to connect MCP servers
 ```json
 {
   "mcpServers": {
     "turret": {
-      "command": "/path/to/mcp_server/target/release/mcp_server",
-      "disabled": false,
+      "command": "/path/to/turret_mcp_server/target/release/turret_mcp_server",
       "alwaysAllow": [
         "set_turret_position",
         "get_bullets",
@@ -42,9 +43,11 @@ This server exposes tools that can be accessed via an MCP client.
   }
 }
 ```
+6. Connect the turret to USB
+
 ## How to use
 In chat context you can simple write: 
-`turn turret left then right`
+`turn the turret left, then right and shoot`
 
 
 
