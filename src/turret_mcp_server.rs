@@ -17,9 +17,9 @@ Serial port commands:
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema, Clone)]
 pub struct ServoPos {
     #[schemars(description = "Turn the Turret left or right X range:0..180, center:90")]
-    pub x: u16,
+    pub x: i32,
     #[schemars(description = "Turn the Turret up or down Y range:0..180, center:90")]
-    pub y: u16,
+    pub y: i32,
 }
 
 #[derive(Clone)]
