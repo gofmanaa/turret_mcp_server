@@ -77,28 +77,33 @@ impl Turret {
 
     #[tool(description = "Turret fire")]
     async fn fire(&self) -> Result<CallToolResult, McpError> {
+        {
+            let mut bullets = self.fire_attempt.lock().unwrap();
+            if *bullets == 0 {
+                return Ok(CallToolResult::success(vec![Content::text(
+                    "Turret can't fire: no bullets left.".to_string(),
+                )]));
+            }
+            *bullets -= 1;
+        } // Mutex guard is dropped here.
+
         let mut port = self.serial_port.lock().unwrap();
         let command = "FIRE\n";
         tracing::debug!("Attempting to send command to serial port: {}", command);
         let write_result = port.write_all(command.as_bytes());
         match write_result {
             Ok(_) => {
+                let bullets = self.fire_attempt.lock().unwrap();
                 tracing::debug!("Successfully wrote command to serial port.");
-                let mut bullets = self.fire_attempt.lock().unwrap();
-                if *bullets == 0 {
-                    return Ok(CallToolResult::success(vec![Content::text(format!(
-                        "Turret can't do {}, bullet left: {}",
-                        command, *bullets
-                    ))]));
-                }
-                *bullets -= 1;
-
                 Ok(CallToolResult::success(vec![Content::text(format!(
-                    "Turret did {}, bullet left: {}",
-                    command, *bullets
+                    "Turret fired. {} bullets left.",
+                    *bullets
                 ))]))
             }
             Err(e) => {
+                // Return the bullet
+                let mut bullets = self.fire_attempt.lock().unwrap();
+                *bullets += 1;
                 tracing::error!("Failed to write to serial port: {}", e);
                 Err(McpError::new(
                     rmcp::model::ErrorCode(-32000),
@@ -114,6 +119,11 @@ impl Turret {
         &self,
         Parameters(ServoPos { x, y }): Parameters<ServoPos>,
     ) -> Result<CallToolResult, McpError> {
+        if !(0..=180).contains(&x) || !(0..=180).contains(&y) {
+            return Ok(CallToolResult::success(vec![Content::text(format!(
+                "Invalid position. X and Y must be between 0 and 180. Got X: {x}, Y: {y}"
+            ))]));
+        }
         let mut port = self.serial_port.lock().unwrap();
         let command = format!("X{}Y{}\n", x as u8, y as u8);
         tracing::debug!(

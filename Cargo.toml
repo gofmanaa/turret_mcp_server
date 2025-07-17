@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rmcp = { version = "0.2.1", features = ["schemars", "transport-io"] }
+rmcp = { version = "0.2.1", features = ["schemars", "transport-io", "transport-sse-server", "transport-streamable-http-server"] }
 tokio = { version = "1.46.1", features = ["full"] }
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 tracing = "0.1.41"
