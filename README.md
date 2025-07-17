@@ -81,7 +81,7 @@ To build the Docker image, run the following command in the project directory:
 
 To run the Docker container, you need to pass the serial port device from the host to the container. You can do this using the `--device` flag.
 
-`docker run -it --device=/dev/ttyUSB0 turret-mcp-server`
+`docker run -it -p 8080:8080 --device=/dev/ttyUSB0 turret-mcp-server`
 
 The SSE MCP configuration (settings.json) for Docker looks like this:
 ```json
